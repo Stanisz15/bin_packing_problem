@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Obstacles list:</h2>
+    <ol>
+        {% for obstacle in obstacles %}
+        <li><a href='/obstacle/{{ obstacle.id }}'>{{ obstacle.name }}</a>--->
+        <a href="/update_obstacle/{{ obstacle.id }}">modyfikuj</a></li>
+        <a href="/delete_obstacle/{{ obstacle.id }}">usuń przeszkodę</a>
+        {% endfor %}
+    </ol>
+<p><a href="{% url 'add-obstacle' %}">Dodaj przeszkodę!</a></p>
+{% endblock %}

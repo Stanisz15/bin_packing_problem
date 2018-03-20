@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Przeszkoda: {{ obstacle.name }}</h2>
+<p>Color: {{ obstacle.color }}</p>
+<ol>Elementy:
+    {% for element in obstacle.elements.all %}
+    <li>{{ element.name }}</li>
+    {% endfor %}
+</ol>
+<a href="/obstacles">powrót do listy</a>
+{% endblock %}
