@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Vehicle list:</h2>
+    <ol>
+        {% for vehicle in vehicles %}
+        <li><a href='/vehicle/{{ vehicle.id }}'>{{ vehicle.name }}</a>--->
+        <a href="/update_vehicle/{{ vehicle.id}}">modyfikuj</a></li>
+        {% endfor %}
+    </ol>
+<p><a href="{% url 'add-vehicle' %}">Dodaj pojazd!</a></p>
+{% endblock %}

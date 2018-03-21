@@ -4,7 +4,7 @@ from django.views import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from new_app.forms import ObstacleForm
-from new_app.models import Element, Obstacle
+from new_app.models import Element, Obstacle, Vehicle
 from .forms import LoginForm, NewUserForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -80,6 +80,8 @@ class ElementsView(View):
 
     def get(self, request):
         elements = Element.objects.all()  #order by?
+        if self.request.GET.get('name'):
+            elements = elements.filter(name__icontains=request.GET['name'])
         cnx = {
             'elements': elements
         }
@@ -143,3 +145,40 @@ class ObstacleView(View):
 class DeleteObstacleView(DeleteView):
     model = Obstacle
     success_url = reverse_lazy('obstacles')
+
+
+class VehiclesView(View):
+
+    def get(self, request):
+        vehicles = Vehicle.objects.all()  #order by?
+        cnx = {
+            'vehicles': vehicles
+        }
+        return render(request, template_name="vehicles_list.html", context=cnx)
+
+
+class AddVehicleView(CreateView):
+    model = Vehicle
+    fields = '__all__'
+    success_url = reverse_lazy('vehicles')
+
+
+class UpdateVehicleView(UpdateView):
+    model = Vehicle
+    fields = '__all__'
+    template_name_suffix = '_update_form'
+    success_url = reverse_lazy('vehicles')
+
+
+class VehicleView(View):
+    def get(self, request, vehicle_id):
+        vehicle = get_object_or_404(Vehicle, pk=vehicle_id)
+        cnx = {
+            'vehicle': vehicle,
+        }
+        return render(request, template_name='vehicle.html', context=cnx)
+
+
+class DeleteVehicleView(DeleteView):
+    model = Vehicle
+    success_url = reverse_lazy('vehicles')

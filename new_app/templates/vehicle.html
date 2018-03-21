@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ vehicle.name }}</h2>
+<p>pojemność: {{ vehicle.capacity }} w tonach</p>
+<p>cena: {{ vehicle.price }}</p>
+
+{% if vehicle.image != None %}
+<p><img src="{{ vehicle.image.url }}"></p>
+{% endif %}
+
+<a href="/vehicles">powrót do listy</a>
+{% endblock %}

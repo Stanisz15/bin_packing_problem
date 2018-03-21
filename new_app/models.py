@@ -24,3 +24,8 @@ class Obstacle(models.Model):
 class Vehicle(models.Model):
     name = models.CharField(max_length=32)
     capacity = models.FloatField()
+    image = models.ImageField(blank=True, null=True)
+    price = models.FloatField()
+
+    def __str__(self):
+        return self.name

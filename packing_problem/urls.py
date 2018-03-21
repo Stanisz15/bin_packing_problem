@@ -13,12 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
 from new_app.views import UserLoginView, UserLogoutView, NewUserView, StartPageView, AddElementView, \
     UpdateElementView, ElementsView, ElementView, AddObstacleView, UpdateObstacleView, ObstaclesView, ObstacleView, \
-    DeleteObstacleView
+    DeleteObstacleView, AddVehicleView, UpdateVehicleView, VehiclesView, VehicleView, DeleteVehicleView
+from packing_problem import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,4 +37,9 @@ urlpatterns = [
     url(r'^obstacles', ObstaclesView.as_view(), name="obstacles"),
     url(r'^obstacle/(?P<obstacle_id>(\d)+)', ObstacleView.as_view(), name='obstacle'),
     url(r'^delete_obstacle/(?P<pk>(\d)+)$', DeleteObstacleView.as_view(), name='delete-obstacle'),
-]
+    url(r'^add_vehicle$', AddVehicleView.as_view(), name='add-vehicle'),
+    url(r'^update_vehicle/(?P<pk>\d+)/$', UpdateVehicleView.as_view(), name='update-vehicle'),
+    url(r'^vehicles', VehiclesView.as_view(), name="vehicles"),
+    url(r'^vehicle/(?P<vehicle_id>(\d)+)', VehicleView.as_view(), name='vehicle'),
+    url(r'^delete_vehicle/(?P<pk>(\d)+)$', DeleteVehicleView.as_view(), name='delete-vehicle'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
