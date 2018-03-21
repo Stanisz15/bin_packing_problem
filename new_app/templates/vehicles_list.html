@@ -4,9 +4,17 @@
 <h2>Vehicle list:</h2>
     <ol>
         {% for vehicle in vehicles %}
-        <li><a href='/vehicle/{{ vehicle.id }}'>{{ vehicle.name }}</a>--->
-        <a href="/update_vehicle/{{ vehicle.id}}">modyfikuj</a></li>
+        <li><a href='/vehicle/{{ vehicle.id }}'>{{ vehicle.name }}</a>
+        {% if perms.new_app.change_vehicle %}--->
+        <a href="/update_vehicle/{{ vehicle.id}}">modyfikuj</a><br>
+        {% endif %}
+        {% if perms.new_app.delete_vehicle %}
+        <a href="/delete_vehicle/{{ vehicle.id }}">usuń pojazd</a></li>
+        {% endif %}
         {% endfor %}
     </ol>
+{% if perms.new_app.add_vehicle %}
 <p><a href="{% url 'add-vehicle' %}">Dodaj pojazd!</a></p>
+{% endif %}
+<p><a href="{% url 'main' %}">main page</a></p>
 {% endblock %}

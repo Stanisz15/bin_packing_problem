@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
@@ -120,13 +121,21 @@ class ObstaclesView(View):
         return render(request, template_name="obstacles_list.html", context=cnx)
 
 
-class AddObstacleView(CreateView):
+class AddObstacleView(PermissionRequiredMixin, CreateView):
+
+    permission_required = 'my_app.add_obstacle'
+    raise_exception = True
+
     model = Obstacle
     form_class = ObstacleForm
     success_url = reverse_lazy('obstacles')
 
 
-class UpdateObstacleView(UpdateView):
+class UpdateObstacleView(PermissionRequiredMixin, UpdateView):
+
+    permission_required = 'my_app.change_obstacle'
+    raise_exception = True
+
     model = Obstacle
     fields = '__all__'
     template_name_suffix = '_update_form'
@@ -142,7 +151,11 @@ class ObstacleView(View):
         return render(request, template_name='obstacle.html', context=cnx)
 
 
-class DeleteObstacleView(DeleteView):
+class DeleteObstacleView(PermissionRequiredMixin, DeleteView):
+
+    permission_required = 'my_app.delete_obstacle'
+    raise_exception = True
+
     model = Obstacle
     success_url = reverse_lazy('obstacles')
 
@@ -157,13 +170,21 @@ class VehiclesView(View):
         return render(request, template_name="vehicles_list.html", context=cnx)
 
 
-class AddVehicleView(CreateView):
+class AddVehicleView(PermissionRequiredMixin, CreateView):
+
+    permission_required = 'my_app.add_vehicle'
+    raise_exception = True
+
     model = Vehicle
     fields = '__all__'
     success_url = reverse_lazy('vehicles')
 
 
-class UpdateVehicleView(UpdateView):
+class UpdateVehicleView(PermissionRequiredMixin, UpdateView):
+
+    permission_required = 'my_app.change_obstacle'
+    raise_exception = True
+
     model = Vehicle
     fields = '__all__'
     template_name_suffix = '_update_form'
@@ -179,6 +200,10 @@ class VehicleView(View):
         return render(request, template_name='vehicle.html', context=cnx)
 
 
-class DeleteVehicleView(DeleteView):
+class DeleteVehicleView(PermissionRequiredMixin, DeleteView):
+
+    permission_required = 'my_app.delete_obstacle'
+    raise_exception = True
+
     model = Vehicle
     success_url = reverse_lazy('vehicles')

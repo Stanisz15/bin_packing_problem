@@ -2,11 +2,11 @@
 
 {% block content %}
 <h2>{{ vehicle.name }}</h2>
-<p>pojemność: {{ vehicle.capacity }} w tonach</p>
-<p>cena: {{ vehicle.price }}</p>
+<p>pojemność w tonach: {{ vehicle.capacity }}</p>
+<p>cena: {{ vehicle.price }} PLN</p>
 
 {% if vehicle.image != None %}
-<p><img src="{{ vehicle.image.url }}"></p>
+<p><img src="{{ vehicle.image.url }}" height="400" width="600"></p>
 {% endif %}
 
 <a href="/vehicles">powrót do listy</a>

@@ -4,10 +4,17 @@
 <h2>Obstacles list:</h2>
     <ol>
         {% for obstacle in obstacles %}
-        <li><a href='/obstacle/{{ obstacle.id }}'>{{ obstacle.name }}</a>--->
-        <a href="/update_obstacle/{{ obstacle.id }}">modyfikuj</a></li>
-        <a href="/delete_obstacle/{{ obstacle.id }}">usuń przeszkodę</a>
+        <li><a href='/obstacle/{{ obstacle.id }}'>{{ obstacle.name }}</a>
+        {% if perms.new_app.change_obstacle %}--->
+        <a href="/update_obstacle/{{ obstacle.id}}">modyfikuj</a><br>
+        {% endif %}
+        {% if perms.new_app.delete_obstacle %}
+        <a href="/delete_obstacle/{{ obstacle.id }}">usuń przeszkodę</a></li>
+        {% endif %}
         {% endfor %}
     </ol>
+{% if perms.new_app.add_obstacle %}
 <p><a href="{% url 'add-obstacle' %}">Dodaj przeszkodę!</a></p>
+{% endif %}
+<p><a href="{% url 'main' %}">main page</a></p>
 {% endblock %}

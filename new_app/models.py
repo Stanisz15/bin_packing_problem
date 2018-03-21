@@ -29,3 +29,10 @@ class Vehicle(models.Model):
 
     def __str__(self):
         return self.name
+
+
+#  model pod algorytm
+# class Transport(models.Model):
+#     name = models.CharField(max_length=32)
+#     obstacles = models.ManyToManyField(Obstacle)
+#     vehicles = models.ManyToManyField(Vehicle, null=True)
