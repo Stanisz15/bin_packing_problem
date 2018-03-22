@@ -19,7 +19,7 @@ from django.urls import path
 from django.conf.urls import url
 from new_app.views import UserLoginView, UserLogoutView, NewUserView, StartPageView, AddElementView, \
     UpdateElementView, ElementsView, ElementView, AddObstacleView, UpdateObstacleView, ObstaclesView, ObstacleView, \
-    DeleteObstacleView, AddVehicleView, UpdateVehicleView, VehiclesView, VehicleView, DeleteVehicleView
+    DeleteObstacleView, AddVehicleView, UpdateVehicleView, VehiclesView, VehicleView, DeleteVehicleView, SetTransport
 from packing_problem import settings
 
 urlpatterns = [
@@ -42,4 +42,5 @@ urlpatterns = [
     url(r'^vehicles', VehiclesView.as_view(), name="vehicles"),
     url(r'^vehicle/(?P<vehicle_id>(\d)+)', VehicleView.as_view(), name='vehicle'),
     url(r'^delete_vehicle/(?P<pk>(\d)+)$', DeleteVehicleView.as_view(), name='delete-vehicle'),
+    url(r'^set_transports/$', SetTransport.as_view(), name="set-transport"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

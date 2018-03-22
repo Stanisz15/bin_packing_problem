@@ -1,11 +1,12 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.db.models.aggregates import Sum
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from new_app.forms import ObstacleForm
-from new_app.models import Element, Obstacle, Vehicle
+from new_app.models import Element, Obstacle, Vehicle, Transport
 from .forms import LoginForm, NewUserForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -148,6 +149,13 @@ class ObstacleView(View):
         cnx = {
             'obstacle': obstacle,
         }
+        weights = [element.weight for element in obstacle.elements.all()]
+        total_weight = sum(weights)
+        cnx['total_weight'] = total_weight
+
+        django_weight = obstacle.elements.all().aggregate(Sum('weight'))  # {'weight__sum': 1431.1}
+        print(django_weight)
+        cnx['django_weight'] = django_weight['weight__sum']
         return render(request, template_name='obstacle.html', context=cnx)
 
 
@@ -207,3 +215,47 @@ class DeleteVehicleView(PermissionRequiredMixin, DeleteView):
 
     model = Vehicle
     success_url = reverse_lazy('vehicles')
+
+
+class SetTransport(View):
+    def get(self, request):
+        # czy suma samochodow < sumy elementow
+        # weights = [element.weight for element in Element.objects.all()]
+        # total_weight = sum(weights)
+        # capacity = [vehicle.capacity for vehicle in Vehicle.objects.all()]
+        # total_capacity = sum(capacity)
+        # if total_weight <= total_capacity:
+        #     total_capacity -= total_weight
+            # Sortujemy elementy po rozmiarze
+
+        elements = Element.objects.all().order_by('-weight')
+        available_vehicles = Vehicle.objects.order_by('-capacity')
+        current_vehicle_index = 0
+        current_vehicle = available_vehicles[current_vehicle_index]
+        current_vehicle_capacity = current_vehicle.capacity
+        current_capacity = 0
+        current_transport = Transport.objects.create(vehicle=current_vehicle)
+        try:
+            for element in elements:
+                if element.weight + current_capacity <= current_vehicle_capacity:
+                    current_transport.elements.add(element)
+                    current_capacity += element.weight
+                    element.available = False
+                    element.save()
+                else:
+                    current_vehicle_index += 1
+                    current_vehicle = available_vehicles[current_vehicle_index]
+                    current_capacity = 0
+                    current_transport = Transport.objects.create(vehicle=current_vehicle)
+                    current_transport.elements.add(element)
+                    element.available = False
+                    element.save()
+            transports = Transport.objects.all()
+            cnx = {
+                'transports': transports,
+            }
+            return render(request, template_name='transport.html', context=cnx)
+        except IndexError:
+            return render(request, template_name='bad_transport.html')
+
+

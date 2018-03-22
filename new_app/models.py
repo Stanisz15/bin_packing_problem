@@ -1,12 +1,11 @@
 from django.core.validators import RegexValidator
 from django.db import models
 
-# Create your models here.
-
 
 class Element(models.Model):
     name = models.CharField(max_length=32)
     weight = models.FloatField()
+    available = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -32,7 +31,9 @@ class Vehicle(models.Model):
 
 
 #  model pod algorytm
-# class Transport(models.Model):
-#     name = models.CharField(max_length=32)
-#     obstacles = models.ManyToManyField(Obstacle)
-#     vehicles = models.ManyToManyField(Vehicle, null=True)
+class Transport(models.Model):
+    elements = models.ManyToManyField(Element)
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "Plan na zaladunek {}".format(self.vehicle.name)

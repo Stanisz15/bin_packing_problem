@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% for transport in transports %}
+<h2>Samochód: {{ transport.vehicle.name }}</h2>
+<ol>Elementy:
+    {% for element in transport.elements.all %}
+    <li>{{ element.name }}</li>
+    {% endfor %}
+</ol>
+{% endfor %}
+<a href="/obstacles">powrót do listy</a>
+{% endblock %}
