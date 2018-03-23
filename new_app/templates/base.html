@@ -15,6 +15,7 @@ Jesteś zalogowany jako: {{ request.user.username }}
 {% block content %}
 {% if request.user.is_authenticated %}
 <a href="{% url 'elements' %}">elements</a> <a href="{% url 'obstacles' %}">obstacles</a> <a href="{% url 'vehicles' %}">vehicles</a>
+<h3><a href="{% url 'set-transport' %}">nowy załadunek</a></h3>
 {% endif %}
 {% endblock %}
 </body>

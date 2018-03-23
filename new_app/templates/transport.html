@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
+<a href="/">main page</a>
 {% for transport in transports %}
-<h2>Samochód: {{ transport.vehicle.name }}</h2>
-<ol>Elementy:
+<h2>Pojazd: {{ transport.vehicle.name }} Pojemność {{ transport.vehicle.capacity }} kg</h2>
+<h3>Waga elementów: {{ transport.vehicle.current_weight }} kg</h3>
+<h3>Elementy:</h3>
+<ol>
     {% for element in transport.elements.all %}
     <li>{{ element.name }}</li>
     {% endfor %}
 </ol>
 {% endfor %}
-<a href="/obstacles">powrót do listy</a>
 {% endblock %}

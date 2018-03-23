@@ -1,5 +1,6 @@
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models.aggregates import Sum
 
 
 class Element(models.Model):
@@ -29,11 +30,22 @@ class Vehicle(models.Model):
     def __str__(self):
         return self.name
 
+    def current_weight(self):
+        transport = self.transport_set.first()
+        if transport:
+            weight = transport.elements.aggregate(Sum('weight'))
+            if weight.get('weight__sum', 0) is None:
+                return 0
+            else:
+                return weight.get('weight__sum')
+        else:
+            return 0
 
-#  model pod algorytm
+
 class Transport(models.Model):
     elements = models.ManyToManyField(Element)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
+    weight_left = models.FloatField(null=True)
 
     def __str__(self):
         return "Plan na zaladunek {}".format(self.vehicle.name)
